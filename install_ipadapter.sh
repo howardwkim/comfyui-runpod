@@ -63,6 +63,11 @@ download_and_rename \
     "CLIP-ViT-bigG-14-laion2B-39B-b160k.safetensors" \
     "$CLIP_VISION_DIR"
 
+download_and_rename \
+    "https://huggingface.co/Kwai-Kolors/Kolors-IP-Adapter-Plus/resolve/main/image_encoder/pytorch_model.bin" \
+    "clip-vit-large-patch14-336.bin" \
+    "$CLIP_VISION_DIR"
+
 # Download IPAdapter models (no renaming needed)
 echo -e "\n${YELLOW}Downloading IPAdapter models...${NC}"
 download "https://huggingface.co/h94/IP-Adapter/resolve/main/models/ip-adapter_sd15.safetensors" "$IPADAPTER_DIR"
