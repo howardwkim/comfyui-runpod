@@ -1,0 +1,2 @@
+ - jupyter notebooks not available when creating pod from command line
+ - Am I able to get Connection Options info via api? Id like to instantiate a pod and connect to the http service without opening the runpod website - is this possible?

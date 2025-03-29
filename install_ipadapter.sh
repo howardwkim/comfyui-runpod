@@ -1,7 +1,10 @@
 #!/bin/bash
- # chmod +x install_ipadapter.sh
+# chmod +x install_ipadapter.sh
 # Exit on error
 set -e
+
+# Source utility functions
+source ./utils.sh
 
 # Colors for output
 RED='\033[0;31m'
@@ -19,54 +22,22 @@ LORAS_DIR="$COMFY_DIR/models/loras"
 echo -e "${YELLOW}Creating directories...${NC}"
 mkdir -p "$CLIP_VISION_DIR" "$IPADAPTER_DIR" "$LORAS_DIR"
 
-# Function to download files
-download() {
-    local url=$1
-    local target_dir=$2
-    
-    local filename=$(basename "$url")
-    echo -e "${YELLOW}Downloading $filename...${NC}"
-    wget -q --show-progress "$url" -O "$target_dir/$filename"
-    if [ $? -eq 0 ]; then
-        echo -e "${GREEN}Successfully downloaded $filename${NC}"
-    else
-        echo -e "${RED}Failed to download $filename${NC}"
-        exit 1
-    fi
-}
-
-# Function to download and rename files
-download_and_rename() {
-    local url=$1
-    local target_name=$2
-    local target_dir=$3
-    
-    echo -e "${YELLOW}Downloading $target_name...${NC}"
-    wget -q --show-progress "$url" -O "$target_dir/$target_name"
-    if [ $? -eq 0 ]; then
-        echo -e "${GREEN}Successfully downloaded $target_name${NC}"
-    else
-        echo -e "${RED}Failed to download $target_name${NC}"
-        exit 1
-    fi
-}
-
 # Download CLIP Vision encoders (need renaming)
 echo -e "\n${YELLOW}Downloading CLIP Vision encoders...${NC}"
-download_and_rename \
+download \
     "https://huggingface.co/h94/IP-Adapter/resolve/main/models/image_encoder/model.safetensors" \
-    "CLIP-ViT-H-14-laion2B-s32B-b79K.safetensors" \
-    "$CLIP_VISION_DIR"
+    "$CLIP_VISION_DIR" \
+    "CLIP-ViT-H-14-laion2B-s32B-b79K.safetensors"
 
-download_and_rename \
+download \
     "https://huggingface.co/h94/IP-Adapter/resolve/main/sdxl_models/image_encoder/model.safetensors" \
-    "CLIP-ViT-bigG-14-laion2B-39B-b160k.safetensors" \
-    "$CLIP_VISION_DIR"
+    "$CLIP_VISION_DIR" \
+    "CLIP-ViT-bigG-14-laion2B-39B-b160k.safetensors"
 
-download_and_rename \
+download \
     "https://huggingface.co/Kwai-Kolors/Kolors-IP-Adapter-Plus/resolve/main/image_encoder/pytorch_model.bin" \
-    "clip-vit-large-patch14-336.bin" \
-    "$CLIP_VISION_DIR"
+    "$CLIP_VISION_DIR" \
+    "clip-vit-large-patch14-336.bin"
 
 # Download IPAdapter models (no renaming needed)
 echo -e "\n${YELLOW}Downloading IPAdapter models...${NC}"
@@ -100,15 +71,15 @@ download "https://huggingface.co/h94/IP-Adapter-FaceID/resolve/main/ip-adapter-f
 
 # Download community models (need renaming)
 echo -e "\n${YELLOW}Downloading community models...${NC}"
-download_and_rename \
+download \
     "https://huggingface.co/Kwai-Kolors/Kolors-IP-Adapter-Plus/resolve/main/ip_adapter_plus_general.bin" \
-    "Kolors-IP-Adapter-Plus.bin" \
-    "$IPADAPTER_DIR"
+    "$IPADAPTER_DIR" \
+    "Kolors-IP-Adapter-Plus.bin"
 
-download_and_rename \
+download \
     "https://huggingface.co/Kwai-Kolors/Kolors-IP-Adapter-FaceID-Plus/resolve/main/ipa-faceid-plus.bin" \
-    "Kolors-IP-Adapter-FaceID-Plus.bin" \
-    "$IPADAPTER_DIR"
+    "$IPADAPTER_DIR" \
+    "Kolors-IP-Adapter-FaceID-Plus.bin"
 
 echo -e "\n${GREEN}All models have been downloaded successfully!${NC}"
 echo -e "${YELLOW}Note: For Kolors models, you need to manually download the InsightFace antelopev2 model from https://huggingface.co/MonsterMMORPG/tools/tree/main and place it in the models/insightface directory.${NC}" 
